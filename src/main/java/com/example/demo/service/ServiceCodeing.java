@@ -12,6 +12,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+
 @Service
 public class ServiceCodeing {
     @Autowired
@@ -26,10 +28,12 @@ public List<ViewEntity> get(Long employeeId) {
     int k = 0;
     ErrorMessage em = new ErrorMessage();
     Employee employee;
+
     List<Employee> list = employeeRepositary.findAll();
     List<ViewEntity> list1 = new ArrayList<>();
     List<ViewEntity> list2 = new ArrayList<>();
     ViewEntity ve = new ViewEntity();
+
     for (int i = 0; i < list.size(); i++) {
         if (employeeId.equals(list.get(i).getId())) {
             ve.setFirst_name(list.get(i).getFirstName());
@@ -61,10 +65,12 @@ public List<ViewEntity> get(Long employeeId) {
 public ResponseEntity<?> SaveEmployee(Employee employee){
     int saveFlag=0;
     ErrorMessage em = new ErrorMessage();
+    //findbyEmail
     List<Employee> list= employeeRepositary.findAll();
     for(int i=0;i<list.size();i++){
         if(employee.getEmail().equals(list.get(i).getEmail())){
             saveFlag=1;
+            break;
         }
     }
     if(saveFlag==0){
@@ -84,16 +90,10 @@ public ResponseEntity<?> SaveEmployee(Employee employee){
 
     public ResponseEntity<?> update(Long employeeId,Employee employeeDetails){
         ErrorMessage em = new ErrorMessage();
-        Employee employee;
-        int saveFlag = 0;
-        List<Employee> list = employeeRepositary.findAll();
-        for (int i = 0; i < list.size(); i++) {
-            if (employeeId.equals(list.get(i).getId())) {
-                saveFlag = 1;
-                break;
-            }
-        }
-        if(saveFlag == 0){
+        Optional<Employee> employee;
+        Long c = employeeId;
+        employee = employeeRepositary.findById(employeeId);
+        if(employee==null){
             em.setStatus(0);
             em.setMessage("ID not found");
             return new ResponseEntity<>(em, HttpStatus.BAD_REQUEST);
@@ -105,18 +105,15 @@ public ResponseEntity<?> SaveEmployee(Employee employee){
             return ResponseEntity.ok(this.employeeRepositary.save(employeeDetails));
         }
     }
+
+
+
     public ResponseEntity<?> delete(Long employeeId){
-        ErrorMessage em = new ErrorMessage();
-        Employee employee;
-        int saveFlag=0;
-        List<Employee> list= employeeRepositary.findAll();
-        for(int i=0;i<list.size();i++){
-            if(employeeId.equals(list.get(i).getId())){
-                saveFlag=1;
-                break;
-            }
-        }
-        if ( saveFlag == 1){
+        ErrorMessage em = new ErrorMessage();   //common msg
+        Optional<Employee> employee;
+        Long c = employeeId;
+        employee = employeeRepositary.findById(employeeId);
+        if(employee != null){
             employeeRepositary.deleteById(employeeId);
             em.setStatus(1);
             em.setMessage("deleted Succesfully");
