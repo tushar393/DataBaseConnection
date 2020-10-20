@@ -82,7 +82,7 @@ public ResponseEntity<?> SaveEmployee(Employee employee){
     else{
         //ErrorMessage em = new ErrorMessage();
         em.setStatus(0);
-        em.setMessage("Email Already Exits");
+        em.setMessage("Email Already registered");
         //throw(new ResourceNotFoundException("Already exits by email  ::"+ employee.getEmail()));
         return new ResponseEntity<>(em, HttpStatus.BAD_REQUEST);
     }
