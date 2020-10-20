@@ -95,7 +95,7 @@ public ResponseEntity<?> SaveEmployee(Employee employee){
         employee = employeeRepositary.findById(employeeId);
         if(employee==null){
             em.setStatus(0);
-            em.setMessage("ID not found");
+            em.setMessage("This ID is not found in the database");
             return new ResponseEntity<>(em, HttpStatus.BAD_REQUEST);
         }
         else{
