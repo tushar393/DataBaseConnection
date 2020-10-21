@@ -1,6 +1,7 @@
 package com.example.demo.model;
 
 import javax.persistence.*;
+import java.util.Optional;
 
 @Entity
 @Table(name= "employees")
@@ -23,6 +24,7 @@ public class Employee {
         this.lastName = lastName;
         this.email = email;
     }
+
 
     public long getId() {
         return id;
